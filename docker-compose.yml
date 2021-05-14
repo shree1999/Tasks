@@ -1,0 +1,31 @@
+version: '3'
+services:
+  mongodb:
+    image: mongo
+    container_name: mongodb_database
+    volumes:
+      - /mongodb/database:/data/db
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.dev
+    image: server
+    container_name: express_server
+    volumes:
+      - /app/node_modules
+      - ./backend:/app
+    depends_on:
+      - mongodb
+    environment: # sets these variable at run time
+      - PORT=8000
+      - MONGODB_URI=mongodb:27017
+  client:
+    build:
+      context: ./client
+      dockerfile: Dockerfile.dev
+    image: client
+    container_name: react_client
+    volumes:
+      - /app/node_modules
+      - ./client:/app
+    stdin_open: true
