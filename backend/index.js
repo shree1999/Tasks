@@ -11,7 +11,7 @@ connectDatabase(); // database connection
 app.get('/', (req, res) => {
   res.setHeader('Content-type', 'application/json');
 
-  res.send({ success: true, message: 'Server running!' });
+  res.send({ success: true, message: 'Server running hurray!' });
 });
 
 app.listen(PORT, () => {

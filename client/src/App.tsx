@@ -9,7 +9,7 @@ export const App: React.FC = () => {
   const onClickHandler = async () => {
     try {
       const res = await axios.get<ISuccess>('/api/');
-      console.log(res.data.success);
+      console.log(res.data);
     } catch (err) {
       console.error(err);
     }
