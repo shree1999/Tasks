@@ -1,0 +1,19 @@
+language: generic
+services:
+  - docker
+before_install:
+  - docker build -t shreeanshgupta/react-test -f ./client/Dockerfile.dev ./client
+  - docker build -t shreeanshgupta/server-test -f ./backend/Dockerfile.dev ./backend
+script:
+  - docker run -e CI=true shreeanshgupta/react-test yarn test -- --coverage
+  - docker run -e CI=true shreeanshgupta/server-test npm run test -- --coverage
+after_success:
+  - docker build -t shreeanshgupta/task-client ./client
+  - docker build -t shreeanshgupta/task-server ./backend
+  - docker build -t shreeanshgupta/task-nginx ./nginx
+  # login to docker hub
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # push images
+  - docker push shreeanshgupta/task-client
+  - docker push shreeanshgupta/task-server
+  - docker push shreeanshgupta/task-nginx
